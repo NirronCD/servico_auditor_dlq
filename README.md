@@ -1,0 +1,7 @@
+Para a execução deste serviço de auditoria, houve a escolha da Arquitetura Hexagonal, que também é denominada padrão de ports and adapters. Com esta decisão, é possível que o núcleo do sistema, que contém as regras de negócio, esteja isolado das tecnologias externas, tais como a nuvem da AWS e o banco de dados.
+
+E o projeto está estruturado em três partes principais - no centro está a camada de domínio, que possui código sem dependências de ferramentas externas. Inserida nesta camada, a aplicação realiza o cálculo da quantidade de itens com erro para que a gravidade do problema seja categorizada entre níveis superiores, intermediários ou inferiores. Por estar essa lógica de triagem posicionada de forma isolada no centro do projeto, o funcionamento principal do sistema é preservado se ocorrerem mudanças tecnológicas futuras.
+
+Ao redor desta regra central, está a camada de aplicação, que funciona para a comunicação por meio de portas de entrada e de saída. Já na zona periférica do projeto, encontra se a infraestrutura, local onde estão os adaptadores. E é nesta camada que o sistema estabelece a conexão com a fila SQS para a coleta da mensagem de erro e com o banco de dados H2 para o armazenamento dos dados.
+
+Com a organização do projeto desta maneira, há um benefício para a integridade das informações. Como a fila e o banco de dados são componentes externos, é possível que o fluxo ocorra de modo que o sistema remova a mensagem da fila somente após o banco de dados emitir a confirmação de que o salvamento dos dados está concluído.
