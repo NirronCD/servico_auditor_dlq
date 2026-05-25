@@ -32,7 +32,7 @@ public class AuditRepositoryPortAdapter implements AuditRepositoryPort {
         AuditEntity entity = auditMapper.toEntity(deadLetterBO);
 
         entity.setErrorId(UUID.randomUUID().toString());
-        entity.setQueueName(this.dlqName);
+        entity.setQueueName(deadLetterBO.getOrigin());
         entity.setTimestamp(OffsetDateTime.now().toString());
         entity.setStatus("PENDING_ANALYSIS");
 
